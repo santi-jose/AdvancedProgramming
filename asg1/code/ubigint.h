@@ -20,18 +20,18 @@ class ubigint { //ubigint class
       void multiply_by_2(); //ubigint.multiply_by_2(): multiplies ubigint by 2
       void divide_by_2(); //ubigint.divide_by_2(): divides ubigint by 2
 
-      ubigint() = default; // Need default ctor as well.
+      ubigint() = default; // Need default constructor as well
       ubigint (unsigned long); //ubigint constructor with input of unsigned long
       ubigint (const string&); //ubigint constructor with input of string pointer
 
-      ubigint operator+ (const ubigint&) const; //operator+ function prototype that adds two ubigint's
-      ubigint operator- (const ubigint&) const; //operator- function prototype that subtracts two ubigint's
-      ubigint operator* (const ubigint&) const; //operator* function prototype that multiplies two ubigint's
-      ubigint operator/ (const ubigint&) const; //operator/ function prototype that divides two ubigint's
-      ubigint operator% (const ubigint&) const; //operator% function prototype that finds the remainder of the division of two ubigint's
+      ubigint operator+ (const ubigint&) const; //operator+ function prototype: adds two ubigint's
+      ubigint operator- (const ubigint&) const; //operator- function prototype: subtracts two ubigint's
+      ubigint operator* (const ubigint&) const; //operator* function prototype: multiplies two ubigint's
+      ubigint operator/ (const ubigint&) const; //operator/ function prototype: divides two ubigint's
+      ubigint operator% (const ubigint&) const; //operator% function prototype: finds the remainder of the division of two ubigint's
 
-      bool operator== (const ubigint&) const; //operator== function prototype that checks for equality of two ubigint's
-      bool operator<  (const ubigint&) const; //operator< function prototype that checks if one ubigint is less than another
+      bool operator== (const ubigint&) const; //operator== function prototype: checks for equality of two ubigint's
+      bool operator<  (const ubigint&) const; //operator< function prototype: checks if one ubigint is less than another
 };
 
 #endif
