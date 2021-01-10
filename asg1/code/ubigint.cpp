@@ -11,42 +11,46 @@ using namespace std;
 #include "relops.h"
 #include "ubigint.h"
 
-ubigint::ubigint (unsigned long that): uvalue (that) {
-   DEBUGF ('~', this << " -> " << uvalue)
-}
-
-ubigint::ubigint (const string& that): uvalue(0) {
-   DEBUGF ('~', "that = \"" << that << "\"");
-   for (char digit: that) {
-      if (not isdigit (digit)) {
-         throw invalid_argument ("ubigint::ubigint(" + that + ")");
-      }
-      uvalue = uvalue * 10 + digit - '0';
+ubigint::ubigint (unsigned long that) { //ubigint constructor
+   //DEBUGF ('~', this << " -> " << ubig_value)
+   while(that != 0){ //while that is non-zero
+      ubig_value.push_back(that%10); //push least significant digit from 0-9 into ubig_value
+	  that = that/10; //divide that by 10 to evaluate next significant digit in that
    }
 }
 
+ubigint::ubigint (const string& that): ubig_value(0) { //ubigint constructor
+   //DEBUGF ('~', "that = \"" << that << "\"");
+   for (char digit: that) { //iterate through chars in string& that
+      if (not isdigit (digit)) { //if the char is not a digit
+         throw invalid_argument ("ubigint::ubigint(" + that + ")"); //throw error
+      } //otherwise
+      ubig_value.push_back(digit - '0'); //push conversion of char to ubig_value(digit - '0')
+   }
+}
+/*
 ubigint ubigint::operator+ (const ubigint& that) const {
    DEBUGF ('u', *this << "+" << that);
-   ubigint result (uvalue + that.uvalue);
+   ubigint result (ubig_value + that.ubig_value);
    DEBUGF ('u', result);
    return result;
 }
 
 ubigint ubigint::operator- (const ubigint& that) const {
    if (*this < that) throw domain_error ("ubigint::operator-(a<b)");
-   return ubigint (uvalue - that.uvalue);
+   return ubigint (ubig_value - that.ubig_value);
 }
 
 ubigint ubigint::operator* (const ubigint& that) const {
-   return ubigint (uvalue * that.uvalue);
+   return ubigint (ubig_value * that.ubig_value);
 }
 
 void ubigint::multiply_by_2() {
-   uvalue *= 2;
+   ubig_value *= 2;
 }
 
 void ubigint::divide_by_2() {
-   uvalue /= 2;
+   ubig_value /= 2;
 }
 
 
@@ -85,14 +89,19 @@ ubigint ubigint::operator% (const ubigint& that) const {
 }
 
 bool ubigint::operator== (const ubigint& that) const {
-   return uvalue == that.uvalue;
+   return ubig_value == that.ubig_value;
 }
 
 bool ubigint::operator< (const ubigint& that) const {
-   return uvalue < that.uvalue;
+   return ubig_value < that.ubig_value;
 }
-
+*/
 ostream& operator<< (ostream& out, const ubigint& that) { 
-   return out << "ubigint(" << that.uvalue << ")";
+   out << "ubigint(";
+   for(auto it = that.rbegin(); it != that.rend(); ++it){ //iterate elements of ubigint from end to begin
+      out << (*it); //send element from ubigint at iterator to ostream& out
+   }
+   out << ")"; //close bracket for current ubigint
+   return out;
 }
 
