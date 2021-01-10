@@ -51,8 +51,8 @@ test : ${EXECBIN}
 Makefile.deps :
 	${GPP} -MM ${C_FILES} >Makefile.deps
 	
-submit : 
-	submit cse111-wm.w21 lab0 $(C_FILES) Makefile
+submit : $(EXECBIN) $(C_FILES) $(H_FILES)
+	submit cse111-wm.w21 lab0 $(EXECBIN) $(C_FILES) $(H_FILES) Makefile README
 
 ifeq (${NODEPS}, )
 include Makefile.deps
