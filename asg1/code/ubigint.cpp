@@ -11,24 +11,32 @@ using namespace std;
 #include "relops.h"
 #include "ubigint.h"
 
-ubigint::ubigint (unsigned long that) { //ubigint constructor
-   //DEBUGF ('~', this << " -> " << ubig_value)
+ubigint::ubigint (unsigned long that): ubig_value (that){ //unsigned long implementation
+   DEBUGF ('~', this << " -> " << ubig_value)
+/*ubigint::ubigint (unsigned long that) { //ubigint constructor
+   DEBUGF ('~', this << " -> " << ubig_value)
    while(that != 0){ //while that is non-zero
       ubig_value.push_back(that%10); //push least significant digit from 0-9 into ubig_value
-	  that = that/10; //divide that by 10 to evaluate next significant digit in that
-   }
+      that = that/10; //divide that by 10 to evaluate next significant digit in that
+   }*/
 }
 
 ubigint::ubigint (const string& that): ubig_value(0) { //ubigint constructor
-   //DEBUGF ('~', "that = \"" << that << "\"");
-   for (char digit: that) { //iterate through chars in string& that
+   DEBUGF ('~', "that = \"" << that << "\"");
+   for (char digit: that) { // unsigned long implementation
+      if (not isdigit (digit)) {
+         throw invalid_argument ("ubigint::ubigint(" + that + ")");
+      }
+      ubig_value = ubig_value * 10 + digit - '0';
+   }
+   /*for (char digit: that) { //iterate through chars in string& that
       if (not isdigit (digit)) { //if the char is not a digit
          throw invalid_argument ("ubigint::ubigint(" + that + ")"); //throw error
       } //otherwise
       ubig_value.push_back(digit - '0'); //push conversion of char to ubig_value(digit - '0')
-   }
+   }*/
 }
-/*
+
 ubigint ubigint::operator+ (const ubigint& that) const {
    DEBUGF ('u', *this << "+" << that);
    ubigint result (ubig_value + that.ubig_value);
@@ -95,13 +103,14 @@ bool ubigint::operator== (const ubigint& that) const {
 bool ubigint::operator< (const ubigint& that) const {
    return ubig_value < that.ubig_value;
 }
-*/
+
 ostream& operator<< (ostream& out, const ubigint& that) { 
-   out << "ubigint(";
-   for(auto it = that.rbegin(); it != that.rend(); ++it){ //iterate elements of ubigint from end to begin
-      out << (*it); //send element from ubigint at iterator to ostream& out
+   return out << "ubigint(" << that.ubig_value << ")"; // unsigned long implementation
+   /*out << "ubigint(";
+   for(auto it = that.ubig_value.rbegin(); it != that.ubig_value.rend(); ++it){ //iterate ubigint from end to begin
+      out << int(*it); //send element from ubigint at iterator to out
    }
    out << ")"; //close bracket for current ubigint
-   return out;
+   return out;*/
 }
 
