@@ -17,25 +17,25 @@ class bigint { //bigint class
    friend ostream& operator<< (ostream&, const bigint&);
    private: //private members
       ubigint uvalue; //declare uvalue as a ubigint
-      bool is_negative {false}; //set is_negative boolean to false as default
+      bool is_negative {false}; //is_negative boolean false as default
    public: //public members
 
-      bigint() = default; // Need default constructor or will be suppressed.
+      bigint() = default; // Need default constructor 
       bigint (long); //bigint ctor converts long to bigint
-      bigint (const ubigint&, bool is_negative = false); //bigint constructor 
+      bigint (const ubigint&, bool is_negative = false);
       explicit bigint (const string&); //explicit bigint constructor
 
       bigint operator+() const; //unary operators
       bigint operator-() const;
 
-      bigint operator+ (const bigint&) const; //operator+ function : adds two bigint's 
-      bigint operator- (const bigint&) const; //operator- function : subtracts two bigint's
-      bigint operator* (const bigint&) const; //operator* function : multiplies two bigint's
-      bigint operator/ (const bigint&) const; //operator/ function : divides two bigint's
-      bigint operator% (const bigint&) const; //operator% function : find the remainder of the quotient of two bigint's
+      bigint operator+ (const bigint&) const; //adds two bigint's 
+      bigint operator- (const bigint&) const; //subtracts two bigint's
+      bigint operator* (const bigint&) const; //multiplies two bigint's
+      bigint operator/ (const bigint&) const; //divides two bigint's
+      bigint operator% (const bigint&) const; //mod of two bigint's
 
-      bool operator== (const bigint&) const; //operator== function : checks equality of two bigint's
-      bool operator<  (const bigint&) const; //operator< function : checks if one bigint is less than the other
+      bool operator== (const bigint&) const; //equality of two bigint's
+      bool operator<  (const bigint&) const; //inequality this<that
 };
 
 #endif
