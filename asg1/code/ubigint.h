@@ -16,26 +16,26 @@ using namespace std;
 class ubigint { //ubigint class
    friend ostream& operator<< (ostream&, const ubigint&);
    private: //private members
-      //using ubigvalue_t = vector<uint8_t>; //ubigvalue_t defined as vector<uint8_t>
-      //ubigvalue_t ubig_value; //create ubig_value of type ubigvalue_t(vector<uint8_t>)
-	  using unumber = unsigned long; //code bigint with unsigned long implementation
-      unumber ubig_value {};
+      using ubigvalue_t = vector<uint8_t>;
+      ubigvalue_t ubig_value; //create ubig_value of type ubigvalue_t
+      void del_zeroes(); //helper function to delete leading zeroes
+
    public: //public members
       void multiply_by_2(); //multiplies ubigint by 2
       void divide_by_2(); //divides ubigint by 2
 
       ubigint() = default; // Need default constructor as well
       ubigint (unsigned long); //ubigint constructor from unsigned long
-      ubigint (const string&); //ubigint constructor from string&(address/reference)
+      ubigint (const string&); //ubigint constructor from string
 
-      ubigint operator+ (const ubigint&) const; //adds two ubigint's
-      ubigint operator- (const ubigint&) const; //subtracts two ubigint's
-      ubigint operator* (const ubigint&) const; //multiplies two ubigint's
-      ubigint operator/ (const ubigint&) const; //divides two ubigint's
-      ubigint operator% (const ubigint&) const; //finds remainder of division of two ubigint's
+      ubigint operator+ (const ubigint&) const; //adds ubigint's
+      ubigint operator- (const ubigint&) const; //subtracts ubigint's
+      ubigint operator* (const ubigint&) const; //multiplies ubigint's
+      ubigint operator/ (const ubigint&) const; //divides ubigint's
+      ubigint operator% (const ubigint&) const; //modulus ubigint's
 
-      bool operator== (const ubigint&) const; //checks for equality of two ubigint's
-      bool operator<  (const ubigint&) const; //checks if one ubigint is less than other
+      bool operator== (const ubigint&) const; //checks equality
+      bool operator<  (const ubigint&) const; //checks this<that
 };
 
 #endif
