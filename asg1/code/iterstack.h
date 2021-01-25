@@ -33,14 +33,14 @@ class iterstack {
    private:
       container stack;
    public:
-      void clear() { stack.clear(); } //Removes all elements from the vector
-      bool empty() const { return stack.empty(); } //Returns whether the vector is empty
-      size_type size() const { return stack.size(); } //Returns the number of elements in the vector
-      const_iterator begin() { return stack.crbegin(); } //Returns an iterator pointing to top of the stack
-      const_iterator end() { return stack.crend(); } //Returns iterator pointing to "element" under bottom of the stack
-      void push (const value_type& value) { stack.push_back (value); } //Adds a new element at the end of the vector
-      void pop() { stack.pop_back(); } //Removes the last element in the vector
-      const value_type& top() const { return stack.back(); } //Returns a reference to the top of the stack
+      void clear() { stack.clear(); } 
+      bool empty() const { return stack.empty(); }
+      size_type size() const { return stack.size(); }
+      const_iterator begin() { return stack.crbegin(); } 
+      const_iterator end() { return stack.crend(); }
+      void push (const value_type& value) { stack.push_back (value); }
+      void pop() { stack.pop_back(); } 
+      const value_type& top() const { return stack.back(); } 
 };
 
 #endif
