@@ -8,17 +8,22 @@ using namespace std;
 
 #include "bigint.h"
 
-bigint::bigint (long that): uvalue (that), is_negative (that < 0) { //bigint constructor
-   DEBUGF ('~', this << " -> " << uvalue) //causes problems until ubigint operator<< is implemented
+//bigint constructor w/ long input
+bigint::bigint (long that): uvalue (that), is_negative (that < 0) { 
+   DEBUGF ('~', this << " -> " << uvalue)
 }
 
-bigint::bigint (const ubigint& uvalue_, bool is_negative_): //bigint constructor
+//bigint constructor w/ uvalue & is_negative input
+bigint::bigint (const ubigint& uvalue_, bool is_negative_): 
                 uvalue(uvalue_), is_negative(is_negative_) {
 }
 
-bigint::bigint (const string& that) { //bigint constructor with string pointer
-   is_negative = that.size() > 0 and that[0] == '_'; //check for negative token '_'
-   uvalue = ubigint (that.substr (is_negative ? 1 : 0)); //convert string into ubigint
+//bigint constructor w/ string reference input
+bigint::bigint (const string& that) { 
+   //check for negative token '_'
+   is_negative = that.size() > 0 and that[0] == '_'; 
+   //convert string into ubigint
+   uvalue = ubigint (that.substr (is_negative ? 1 : 0)); 
 }
 
 bigint bigint::operator+ () const {
@@ -29,57 +34,98 @@ bigint bigint::operator- () const {
    return {uvalue, not is_negative};
 }
 
-bigint bigint::operator+ (const bigint& that) const { //sum of bigint's
+//operator+ adds two bigint's this+that
+bigint bigint::operator+ (const bigint& that) const {
    if(that.is_negative == is_negative){ //if signs are equal
-      ubigint result = uvalue + that.uvalue; //add ubigint's
-	  return bigint(result, is_negative); //return bigint
+      ubigint result = uvalue + that.uvalue; 
+      return bigint(result, is_negative); 
    }else{ //operands are of different sign
-	   if(uvalue > that.uvalue){ //if uvalue has more digits than that.uvalue
-		   ubigint result = uvalue - that.uvalue; //subtract that.uvalue from uvalue
-		   return bigint(result, is_negative); //return bigint with result and is_negative
-	   }else if(that.uvalue > uvalue){ //else if that.uvalue has more digits than uvalue
-		   ubigint result = that.uvalue - uvalue; //subtract uvalue from that.uvalue
-		   return bigint(result, that.is_negative); //return bigint with result and that.is_negative 
-	   }else{ //else uvalue and that.uvalue are the same
-		   ubigint result = that.uvalue - uvalue;
-		   return bigint(result, false);
-	   }
+      if(uvalue > that.uvalue){ 
+         ubigint result = uvalue - that.uvalue; 
+         return bigint(result, is_negative); 
+      }else if(that.uvalue > uvalue){
+         ubigint result = that.uvalue - uvalue; 
+         return bigint(result, that.is_negative);  
+      }else{ //else uvalue and that.uvalue are equal
+         ubigint result = that.uvalue - uvalue; //result = 0
+         return bigint(result, false);
+      }
    }
 }
 
-bigint bigint::operator- (const bigint& that) const { //difference of bigint's
-   ubigint result = uvalue - that.uvalue;
-   return result;
+//operator- subtracts two bigint's this-that
+bigint bigint::operator- (const bigint& that) const {
+   if(that.is_negative == is_negative){ //if signs are equal
+      if(uvalue > that.uvalue){ //if(uvalue > that.uvalue)
+         ubigint result = uvalue - that.uvalue;
+         return bigint(result, is_negative);
+      }else if (that.uvalue > uvalue){ //if(that.uvalue > than uvalue)
+         ubigint result = that.uvalue - uvalue; 
+         return bigint(result, not(that.is_negative));
+      }else{ //uvalue == that.uvalue
+         ubigint result = uvalue - that.uvalue; //result = 0
+         return bigint(result, false); 
+      }
+   }else{ // signs are different 
+      ubigint result = uvalue + that.uvalue;
+      return bigint(result, not(that.is_negative)); 
+   }
 }
 
 
-bigint bigint::operator* (const bigint& that) const { //multipication of bigint's
-   bigint result = uvalue * that.uvalue;
-   return result;
+//operator* multiplies two bigint's this*that
+bigint bigint::operator* (const bigint& that) const {
+   if((uvalue == 0) or (that.uvalue == 0)){
+      return bigint(0, false);
+   }else if(that.is_negative == is_negative){ // equal signs
+      ubigint result = uvalue * that.uvalue; 
+      return bigint(result, false);
+   }else{ //unequal signs
+      ubigint result = uvalue * that.uvalue;
+      return bigint(result, true);
+   }
 }
 
-bigint bigint::operator/ (const bigint& that) const { //quotient of bigint's
-   bigint result = uvalue / that.uvalue;
-   return result;
+//operator/ divides two bigint's this/that
+bigint bigint::operator/ (const bigint& that) const { 
+   if(that.uvalue > uvalue){
+      ubigint result = uvalue / that.uvalue; //result = 0
+      return bigint(result, false);
+   }else if(that.is_negative == is_negative){
+      ubigint result = uvalue / that.uvalue;
+      return bigint(result, false);
+   }else{
+      ubigint result = uvalue / that.uvalue;
+      return bigint(result, true);
+   }
 }
 
-bigint bigint::operator% (const bigint& that) const { //modulus of bigint's
-   bigint result = uvalue % that.uvalue;
-   return result;
+//operator& takes modulus of bigint's this%that
+bigint bigint::operator% (const bigint& that) const {
+   ubigint result = uvalue % that.uvalue;
+   if(result == 0){
+      return bigint(result, false);
+   }else{
+      return bigint(result, is_negative);
+   }
 }
 
-bool bigint::operator== (const bigint& that) const { //equality boolean of bigint's
-   return is_negative == that.is_negative and uvalue == that.uvalue;
+//operator== checks for equality of bigint's this == that
+bool bigint::operator== (const bigint& that) const {
+   return ((is_negative == that.is_negative) 
+           and (uvalue == that.uvalue));
 }
 
-bool bigint::operator< (const bigint& that) const { //less than boolean of bigint's
+//operator< checks for inequality of bigint's this < that
+bool bigint::operator< (const bigint& that) const {
    if (is_negative != that.is_negative) return is_negative;
    return is_negative ? uvalue > that.uvalue
                       : uvalue < that.uvalue;
 }
 
 ostream& operator<< (ostream& out, const bigint& that) {
-   return out << "bigint(" << (that.is_negative ? "-" : "+")
-              << "," << that.uvalue << ")";
+   out << (that.is_negative ? "-" : "");
+   out << that.uvalue;
+   return out;
 }
 
