@@ -47,5 +47,9 @@ command_fn find_command_fn (const string& command);
 int exit_status_message();
 class ysh_exit: public exception {};
 
+//helper functions
+inode_ptr& find_path(inode_state& state, const string& line);
+
+
 #endif
 
