@@ -1,0 +1,5 @@
+# Makefile.dep created Fri Feb  5 20:16:27 PST 2021
+debug.o: debug.cpp debug.h util.h util.tcc
+util.o: util.cpp debug.h util.h util.tcc
+main.o: main.cpp listmap.h debug.h xless.h xpair.h listmap.tcc util.h \
+ util.tcc
