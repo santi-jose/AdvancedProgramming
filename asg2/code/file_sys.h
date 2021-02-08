@@ -40,8 +40,8 @@ class inode_state {
    public:
       inode_state (const inode_state&) = delete; // copy ctor
       inode_state& operator= (const inode_state&) = delete; // op=
-      inode_state(); //constructor, have to create new inode & point cwd and root
-	  ~inode_state(); //destructor
+      inode_state(); //constructor
+      ~inode_state(); //destructor
       const string& prompt() const; //returns prompt
       void prompt (const string& new_prompt); //sets prompt
       inode_ptr& root_(); // root access function
@@ -70,7 +70,7 @@ class inode {
    public:
       inode (file_type);
       size_t get_inode_nr() const;
-	  base_file_ptr& get_contents();//base_file contents access function
+      base_file_ptr& get_contents();//base_file contents access function
 };
 
 
@@ -87,23 +87,23 @@ class file_error: public runtime_error {
 class base_file {
    protected:
       base_file() = default;
-      virtual const string& error_file_type() const = 0; //error derived from subclass
-	  string name {"bruh"}; 
+      virtual const string& error_file_type() const = 0;
+      string name {"bruh"}; 
    public:
       virtual ~base_file() = default;
-      base_file (const base_file&) = delete; //copy prohibited
+      base_file (const base_file&) = delete;
       base_file& operator= (const base_file&) = delete;
-      virtual size_t size() const = 0; //size derived from subclass
-      virtual const wordvec& readfile() const; //plain file exclusive
-      virtual void writefile (const wordvec& newdata); //plain file exclusive
-      virtual void remove (const string& filename); //directory exclusive
-      virtual inode_ptr mkdir (const string& dirname); //directory exclusive
-      virtual inode_ptr mkfile (const string& filename); //directory exclusive
-	  
-	  virtual bool is_dir() const = 0; //pure virtual function
-	  virtual map<string, inode_ptr>& get_dirents();
+      virtual size_t size() const = 0;
+      virtual const wordvec& readfile() const;
+      virtual void writefile (const wordvec& newdata);
+      virtual void remove (const string& filename);
+      virtual inode_ptr mkdir (const string& dirname);
+      virtual inode_ptr mkfile (const string& filename); 
+
+      virtual bool is_dir() const = 0; //pure virtual function
+      virtual map<string, inode_ptr>& get_dirents();
       virtual void set_name (const string& file_name) = 0;
-      virtual const string& get_name () = 0;
+      virtual const string& get_name() = 0;
 };
 
 // class plain_file -
@@ -123,13 +123,13 @@ class plain_file: public base_file {
          return result;
       }
    public:
-      virtual size_t size() const override; //overrides what's in base_file
+      virtual size_t size() const override;
       virtual const wordvec& readfile() const override; 
       virtual void writefile (const wordvec& newdata) override;
-	  
-	  virtual bool is_dir() const override;
+
+      virtual bool is_dir() const override;
       virtual void set_name (const string& file_name) override;
-      virtual const string& get_name () override;
+      virtual const string& get_name() override;
 };
 
 // class directory -
@@ -159,16 +159,16 @@ class directory: public base_file {
          return result;
       }
    public:
-      virtual size_t size() const override; //overrides what's in base_file
+      virtual size_t size() const override;
       virtual void remove (const string& filename) override;
       virtual inode_ptr mkdir (const string& dirname) override;
       virtual inode_ptr mkfile (const string& filename) override;
-	  
-	  //virtual void get_child(const string& filename) override;
-	  virtual bool is_dir() const override;
-	  virtual map<string, inode_ptr>& get_dirents() override;
+
+      //virtual void get_child(const string& filename) override;
+      virtual bool is_dir() const override;
+      virtual map<string, inode_ptr>& get_dirents() override;
       virtual void set_name (const string& file_name) override;
-      virtual const string& get_name () override;
+      virtual const string& get_name() override;
 };
 
 #endif

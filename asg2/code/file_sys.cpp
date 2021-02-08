@@ -36,7 +36,7 @@ inode_state::inode_state() {
 }
 
 inode_state::~inode_state() {
-	
+
 }
 
 inode_ptr& inode_state::root_() { return root; }
@@ -108,9 +108,12 @@ map<string, inode_ptr>& base_file::get_dirents(){
 
 
 size_t plain_file::size() const {
-   size_t size {data.size()-1};
+   size_t size {0};
    for(auto it = data.cbegin();it != data.cend(); ++it){
       size = size + (*it).length();
+   }
+   if (data.size() > 0){
+      size =  size + (data.size() - 1);
    }
    DEBUGF ('i', "size = " << size);
    return size;
@@ -123,7 +126,9 @@ const wordvec& plain_file::readfile() const {
 
 void plain_file::writefile (const wordvec& words) {
    DEBUGF ('i', words);
-   //data = words; replace contents of current data wordvec
+   for(auto it = (words.cbegin()+2); it != words.cend(); ++it){
+      data.push_back(*it);
+   }
 }
 
 bool plain_file::is_dir() const{
@@ -146,9 +151,11 @@ size_t directory::size() const {
 
 void directory::remove (const string& filename) {
    DEBUGF ('i', filename);
-   //cant's delete . and ..; maybe do this in commands
+   //cant delete . and ..; maybe do this in commands
     //does filename exist? dirents.find(filename)
-   dirents.erase(filename);
+   if(dirents.find(filename)!=dirents.end()){
+      dirents.erase(filename);
+   }
 }
 
 inode_ptr directory::mkdir (const string& dirname) {
@@ -163,7 +170,7 @@ inode_ptr directory::mkdir (const string& dirname) {
       dirents.emplace(dirname, new_dir);
       return new_dir; 
    }else{
-      cerr << "mkdir: cannot create directory '"
+      cerr << "mkdir: cannot make directory '"
            << dirname << "': File exists" << endl;
       return nullptr;
    }
@@ -172,10 +179,16 @@ inode_ptr directory::mkdir (const string& dirname) {
 inode_ptr directory::mkfile (const string& filename) {
    DEBUGF ('i', filename);
    //does filename exist? dirents.find(filename)
-   inode_ptr new_file = make_shared<inode>(file_type::PLAIN_TYPE);
-   new_file->get_contents()->set_name(filename);
-   dirents.emplace(filename, new_file);
-   return new_file;
+   if(dirents.find(filename) == dirents.end()){
+      inode_ptr new_file = make_shared<inode>(file_type::PLAIN_TYPE);
+      new_file->get_contents()->set_name(filename);
+      dirents.emplace(filename, new_file);
+      return new_file;
+   }else{
+      cerr << "mkfile: cannot make file '"
+           << filename << "': File exists" << endl;
+      return nullptr;
+   }
 }
 
 bool directory::is_dir() const{
