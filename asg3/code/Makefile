@@ -58,6 +58,9 @@ ${DEPFILE} :
 
 again :
 	${GMAKE} spotless dep ci all lis
+	
+submit:
+	@ submit cse111-wm.w21 asg3 ${ALLSOURCES} README
 
 ifeq (${NEEDINCL}, )
 include ${DEPFILE}
