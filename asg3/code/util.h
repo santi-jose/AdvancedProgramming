@@ -27,7 +27,7 @@ class sys_info {
       static string execname_;
       static int exit_status_;
       static void execname (const string& argv0);
-      friend int main (int argc, char** argv);
+      friend int main (int argc, char** argv); //main(int, char**)
    public:
       static const string& execname ();
       static void exit_status (int status);
